@@ -5,7 +5,15 @@ use Cwd qw/cwd/;
 use File::Basename qw/dirname/;
 use LWP::Simple qw/mirror/;
 
-my $git_exe = '/usr/bin/git';
+my $git_exe;
+for (qw(/bin /usr/bin /usr/local/bin)) {
+    if (-x "$_/git") {
+        $git_exe = "$_/git";
+        last;
+    }
+};
+$git_exe or die "no git found.";
+
 my $data_dir = (dirname __FILE__) . "/data";
 my $base_url = 'http://www.bizoole.com/power';
 
