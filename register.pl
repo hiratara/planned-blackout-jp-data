@@ -36,10 +36,14 @@ exec_git "fetch", "origin";
 exec_git "checkout", "master";
 exec_git "reset", "--hard", "origin/master";
 
+my $needs_push;
 for (@files) {
     my $code = mirror "$base_url/$_", "$data_dir/$_";
     $code =~ /^[23]/ or die "bad status code: $code";
+    $needs_push = 1 if $code == 200;
 }
+
+exit unless $needs_push;
 
 exec_git "add", $_ for @files;
 exec_git "commit", "-m", "the latest files.";
