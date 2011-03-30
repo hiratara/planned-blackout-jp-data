@@ -32,6 +32,9 @@ sub exec_git(@) {
 }
 
 exec_git "clean", "-fd";
+exec_git "fetch", "origin";
+exec_git "checkout", "master";
+exec_git "reset", "--hard", "origin/master";
 
 for (@files) {
     my $code = mirror "$base_url/$_", "$data_dir/$_";
